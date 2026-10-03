@@ -1,0 +1,10 @@
+{
+  "name": "Anivox Academy App",
+  "description": "A premium creative-learning platform for Animation, Photoshop, and Digital Art. Professional training for modern creators.",
+  "permissions": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ],
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

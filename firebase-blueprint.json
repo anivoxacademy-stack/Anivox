@@ -1,0 +1,215 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "A student or admin user profile.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "displayName": { "type": "string", "maxLength": 100 },
+        "email": { "type": "string", "format": "email" },
+        "photoURL": { "type": "string" },
+        "age": { "type": "integer" },
+        "city": { "type": "string", "maxLength": 100 },
+        "phone": { "type": "string", "maxLength": 20 },
+        "interests": { "type": "string", "maxLength": 500 },
+        "role": { "type": "string", "enum": ["student", "admin"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "status": { "type": "string", "enum": ["active", "suspended"] }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "LiveClass": {
+      "title": "LiveClass",
+      "description": "A scheduled or live streaming class.",
+      "type": "object",
+      "properties": {
+        "courseId": { "type": "string" },
+        "title": { "type": "string", "maxLength": 200 },
+        "description": { "type": "string" },
+        "startTime": { "type": "string", "format": "date-time" },
+        "duration": { "type": "string" },
+        "status": { "type": "string", "enum": ["Scheduled", "Live", "Ended"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["courseId", "title", "status"]
+    },
+    "PortfolioProject": {
+      "title": "PortfolioProject",
+      "description": "Showcase portfolio artwork or project.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "maxLength": 200 },
+        "description": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "software": { "type": "string" },
+        "category": { "type": "string" },
+        "visibility": { "type": "string", "enum": ["Public", "Private"] },
+        "studentId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "imageUrl", "visibility"]
+    },
+    "Course": {
+      "title": "Course",
+      "description": "An educational course.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "maxLength": 200 },
+        "slug": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+        "shortDescription": { "type": "string", "maxLength": 500 },
+        "description": { "type": "string" },
+        "thumbnail": { "type": "string" },
+        "banner": { "type": "string" },
+        "instructor": { "type": "string" },
+        "category": { "type": "string" },
+        "difficulty": { "type": "string", "enum": ["Beginner", "Intermediate", "Advanced"] },
+        "price": { "type": "number" },
+        "advancePrice": { "type": "number" },
+        "currency": { "type": "string", "maxLength": 10 },
+        "duration": { "type": "string" },
+        "totalLessons": { "type": "integer" },
+        "schedule": { "type": "string" },
+        "status": { "type": "string", "enum": ["Draft", "Published", "Archived", "Coming Soon"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "price", "status"]
+    },
+    "Payment": {
+      "title": "Payment",
+      "description": "A payment submission by a student.",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string" },
+        "courseId": { "type": "string" },
+        "amount": { "type": "number" },
+        "paymentType": { "type": "string", "enum": ["Advance", "Full", "Remaining"] },
+        "utr": { "type": "string", "maxLength": 50 },
+        "screenshotUrl": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "submittedAt": { "type": "string", "format": "date-time" },
+        "reviewedAt": { "type": "string", "format": "date-time" },
+        "rejectionReason": { "type": "string" }
+      },
+      "required": ["studentId", "courseId", "amount", "utr", "status"]
+    },
+    "Enrollment": {
+      "title": "Enrollment",
+      "description": "Link between a student and a course access.",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string" },
+        "courseId": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "enrolledAt": { "type": "string", "format": "date-time" },
+        "progress": { "type": "number" }
+      },
+      "required": ["studentId", "courseId", "status"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "Real-time user notification.",
+      "type": "object",
+      "properties": {
+        "recipientId": { "type": "string" },
+        "title": { "type": "string" },
+        "message": { "type": "string" },
+        "type": { "type": "string" },
+        "read": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["recipientId", "title", "read"]
+    }
+  },
+  "firestore": {
+    "users": {
+      "schema": "User",
+      "description": "User profiles for students and admins.",
+      "subcollections": {
+        "progress": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "courseId": { "type": "string" },
+              "studentId": { "type": "string" },
+              "completedLessons": { "type": "array", "items": { "type": "string" } },
+              "lastUpdated": { "type": "string", "format": "date-time" }
+            }
+          },
+          "description": "Student course lesson completion progress."
+        }
+      }
+    },
+    "courses": {
+      "schema": "Course",
+      "description": "Course catalog entries."
+    },
+    "payments": {
+      "schema": "Payment",
+      "description": "Manual UPI payment submissions."
+    },
+    "enrollments": {
+      "schema": "Enrollment",
+      "description": "Student enrollment records."
+    },
+    "notifications": {
+      "schema": "Notification",
+      "description": "User notifications."
+    },
+    "classes": {
+      "schema": "LiveClass",
+      "description": "Scheduled live classroom sessions."
+    },
+    "portfolios": {
+      "schema": "PortfolioProject",
+      "description": "Portfolio artwork and project showcase."
+    },
+    "appSettings": {
+      "schema": {
+        "type": "object",
+        "properties": {
+          "data": { "type": "object" }
+        }
+      },
+      "description": "Application settings including branding, about content, and social links."
+    },
+    "admins": {
+      "schema": {
+        "type": "object",
+        "properties": {
+          "email": { "type": "string" }
+        }
+      },
+      "description": "Explicit admin list."
+    },
+    "attendance": {
+      "schema": {
+        "type": "object",
+        "properties": {
+          "studentId": { "type": "string" },
+          "classId": { "type": "string" },
+          "courseId": { "type": "string" },
+          "duration": { "type": "integer" }
+        }
+      },
+      "description": "Live class student attendance tracking."
+    },
+    "audit_logs": {
+      "schema": {
+        "type": "object",
+        "properties": {
+          "adminId": { "type": "string" },
+          "action": { "type": "string" },
+          "targetType": { "type": "string" },
+          "targetId": { "type": "string" },
+          "details": { "type": "object" },
+          "timestamp": { "type": "string", "format": "date-time" }
+        }
+      },
+      "description": "System audit logs for administrative actions."
+    }
+  }
+}

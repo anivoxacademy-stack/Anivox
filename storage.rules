@@ -1,0 +1,50 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        request.auth.token.admin == true ||
+        request.auth.token.email == 'anivoxacademy@gmail.com' ||
+        (request.auth.token.email != null && request.auth.token.email.matches('(?i)^anivoxacademy@gmail\\.com$'))
+      );
+    }
+
+    // Public course thumbnails, banners, and academy branding (admin write only)
+    match /courses/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /branding/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Student profile photos
+    match /profiles/{userId}/{allPaths=**} {
+      allow read: if true;
+      allow write: if (isSignedIn() && request.auth.uid == userId) || isAdmin();
+    }
+
+    // Payment receipts/screenshots: private to student and admin
+    match /payments/{userId}/{allPaths=**} {
+      allow read: if (isSignedIn() && request.auth.uid == userId) || isAdmin();
+      allow write: if (isSignedIn() && request.auth.uid == userId) || isAdmin();
+    }
+
+    match /payments/receipts/{userId}/{allPaths=**} {
+      allow read: if (isSignedIn() && request.auth.uid == userId) || isAdmin();
+      allow write: if (isSignedIn() && request.auth.uid == userId) || isAdmin();
+    }
+
+    // Portfolio project files
+    match /portfolios/{allPaths=**} {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+  }
+}

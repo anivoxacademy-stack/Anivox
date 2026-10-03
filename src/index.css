@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Plus Jakarta Sans", "Inter", ui-sans-serif, system-ui;
+  --font-sans: "Plus Jakarta Sans", "Inter", ui-sans-serif, system-ui;
+  
+  --color-brand-50: #f0f4ff;
+  --color-brand-100: #e0e7ff;
+  --color-brand-200: #c7d2fe;
+  --color-brand-300: #a5b4fc;
+  --color-brand-400: #818cf8;
+  --color-brand-500: #6366f1;
+  --color-brand-600: #4f46e5;
+  --color-brand-700: #4338ca;
+  --color-brand-800: #3730a3;
+  --color-brand-900: #312e81;
+  --color-brand-950: #1e1b4b;
+
+  --color-pastel-lavender: #f3f0ff;
+  --color-pastel-lavender-border: #e9e3ff;
+  --color-pastel-blue: #f0f7ff;
+  --color-pastel-blue-border: #dbeafe;
+  --color-pastel-peach: #fff7ed;
+  --color-pastel-peach-border: #ffedd5;
+  --color-pastel-mint: #f0fdf4;
+  --color-pastel-mint-border: #dcfce7;
+  --color-pastel-pink: #fff1f2;
+  --color-pastel-pink-border: #ffe4e6;
+  --color-pastel-amber: #fffbeb;
+  --color-pastel-amber-border: #fef3c7;
+
+  --shadow-premium: 0 10px 25px -5px rgba(0, 0, 0, 0.03), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+  --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.04);
+  --shadow-float: 0 20px 35px -10px rgba(0, 0, 0, 0.07);
+}
+
+@layer base {
+  :root {
+    --brand-primary: #6366f1;
+    --bg-main: #fbfbfd;
+    --text-main: #18181b;
+    --text-muted: #71717a;
+  }
+
+  body {
+    @apply bg-[#FAF8FA] text-neutral-900 antialiased font-sans;
+    font-feature-settings: "ss01", "ss02", "cv01", "cv02";
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display tracking-tight font-bold text-neutral-900;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-neutral-900 text-white px-6 py-3 rounded-2xl font-semibold transition-all hover:bg-neutral-800 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm;
+  }
+
+  .btn-secondary {
+    @apply bg-white border border-neutral-200 text-neutral-800 px-6 py-3 rounded-2xl font-semibold transition-all hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .card-premium {
+    @apply bg-white border border-neutral-100 rounded-3xl shadow-premium p-6 transition-all hover:shadow-card;
+  }
+
+  .input-standard {
+    @apply w-full px-4 py-3 rounded-2xl border border-neutral-200 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all;
+  }
+}
+
+/* Custom Utilities */
+.text-balance {
+  text-wrap: balance;
+}
+
+.mask-fade {
+  mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
+}
+
+/* Clean Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #e4e4e7;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #d4d4d8;
+}
